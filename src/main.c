@@ -6,7 +6,7 @@
 /*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 15:53:11 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/18 09:33:15 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/18 11:30:00 by maraurel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static const char *s_http_addr = "http://0.0.0.0:3000";
 static const char *s_root_dir = ".";
 
 struct json_datas	json;
-
+MYSQL *con;
 
 struct data
 {
@@ -85,7 +85,7 @@ int	get_information(char *mytoken)
 	if(curl)
 	{
 		CURLcode res;
-		curl_easy_setopt(curl, CURLOPT_URL, "https://api.intra.42.fr/v2/users");
+		curl_easy_setopt(curl, CURLOPT_URL, "https://api.intra.42.fr/v2/me");
 		list = curl_slist_append(list, mytoken);
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
 
@@ -102,10 +102,36 @@ int	get_information(char *mytoken)
 	return (1);
 }
 
+void	query_mysql(MYSQL *con, const char *s)
+{
+	if (mysql_query(con, s))
+	{
+		fprintf(stderr, "%s\n", mysql_error(con));
+		mysql_close(con);
+		exit(1);
+	}
+}
+
 int main(void)
 {
 
 	char	*mytoken;
+	MYSQL *con = mysql_init(NULL);
+
+	// Create database
+	if (con == NULL)
+	{
+		fprintf(stderr, "%s\n", mysql_error(con));
+		exit(1);
+	}
+	if (mysql_real_connect(con, "localhost", "root", "Password1$", "api", 0, NULL, 0) == NULL)
+	{
+		fprintf(stderr, "%s\n", mysql_error(con));
+		mysql_close(con);
+		exit(1);
+	}
+	query_mysql(con, "DROP TABLE IF EXISTS students");
+	query_mysql(con, "CREATE TABLE students(id INT PRIMARY KEY, name VARCHAR(30), projects_done TINYINT);");
 	// Get Token
 	get_token();
 	json.parsed_json = json_tokener_parse(data->content);
