@@ -6,7 +6,7 @@
 /*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 15:53:11 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/18 12:00:36 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/18 14:03:36 by maraurel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,18 +73,27 @@ int	get_token(void)
 
 static size_t	get_id_callback(char *contents, size_t size, size_t nmemb, void *userp)
 {
-	size_t realsize = size * nmemb;
+	int	num_itens;
+	char buffer[1024];
+
 	data = (struct data *) userp;
-
 	data->content = contents;
-	json.parsed_json = json_tokener_parse(data->content);
-	json_object_object_get_ex(json.parsed_json, "id", &json.id);
-	data->id = json_object_get_int(json.id);
+	json.parsed_jsons = json_tokener_parse(data->content); // Get content
+	num_itens = json_object_array_length(json.parsed_jsons);  // Get number of users displayed
 
-	json_object_object_get_ex(json.parsed_json, "login", &json.login);
-	data->login = json_object_get_string(json.login);
-	printf("%i\n %s\n", data->id, data->login);
-	return realsize;
+	// Put ID and LOGIN in database
+	for (int i = 0; i < num_itens; i++)
+	{
+		json.parsed_json = json_object_array_get_idx(json.parsed_jsons, i);
+		json_object_object_get_ex(json.parsed_json, "id", &json.id);
+		json_object_object_get_ex(json.parsed_json, "login", &json.login);
+		sprintf(buffer, "INSERT INTO students VALUES(%i, \'%s\', %s)",
+			json_object_get_int(json.id), json_object_get_string(json.login), "NULL");
+		query_mysql(con, buffer);
+
+	}
+
+	return 0;
 }
 
 int	get_information(char *mytoken)
@@ -95,16 +104,11 @@ int	get_information(char *mytoken)
 	if(curl)
 	{
 		CURLcode res;
-		curl_easy_setopt(curl, CURLOPT_URL, "https://api.intra.42.fr/v2/users");
+		curl_easy_setopt(curl, CURLOPT_URL, "https://api.intra.42.fr/v2/users?page[number]=2");
 		list = curl_slist_append(list, mytoken);
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, get_id_callback);
 		res = curl_easy_perform(curl);
-		if(res != CURLE_OK)
-		{
-			printf("curl_easy_perform failed\n");
-			return (1);
-		}
 		curl_slist_free_all(list);
 		curl_easy_cleanup(curl);
 		return (0);
@@ -126,8 +130,8 @@ int main(void)
 {
 
 	char	*mytoken;
-	MYSQL *con = mysql_init(NULL);
 
+	con = mysql_init(NULL);
 	// Create database
 	if (con == NULL)
 	{

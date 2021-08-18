@@ -6,7 +6,7 @@
 /*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 20:17:41 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/18 11:58:44 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/18 13:47:07 by maraurel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,16 @@
 
 struct	json_datas
 {
-	struct json_object *parsed_json;
 	struct json_object *token;
 
+	struct json_object *parsed_jsons;
+	struct json_object *parsed_json;
+
 	struct json_object *id;
+
 	struct json_object *login;
+
+	struct json_object *proj_dones;
 	struct json_object *proj_done;
 };
 
@@ -42,6 +47,7 @@ struct data
 	char	*proj_done;
 };
 
-char	*ft_strjoin(char const *s1, char const *s2);
+char		*ft_strjoin(char const *s1, char const *s2);
+void		query_mysql(MYSQL *con, const char *s);
 
 #endif
