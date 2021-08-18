@@ -6,7 +6,7 @@
 /*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 15:53:11 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/18 14:03:36 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/18 15:31:20 by maraurel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ static const char *s_http_addr = "http://0.0.0.0:3000";
 static const char *s_root_dir = ".";
 
 struct json_datas	json;
-MYSQL *con;
-
-struct data *data;
+struct data 		*data;
+MYSQL 			*con;
+int			ret_value;
 
 static void fn(struct mg_connection *c, int ev, void *ev_data, void *fn_data)
 {
@@ -71,16 +71,19 @@ int	get_token(void)
 	return (1);
 }
 
-static size_t	get_id_callback(char *contents, size_t size, size_t nmemb, void *userp)
+static size_t	get_id_callback(char *content, size_t size, size_t nmemb, void *userp)
 {
+
 	int	num_itens;
 	char buffer[1024];
 
-	data = (struct data *) userp;
-	data->content = contents;
-	json.parsed_jsons = json_tokener_parse(data->content); // Get content
+	json.parsed_jsons = json_tokener_parse(content); // Get content
 	num_itens = json_object_array_length(json.parsed_jsons);  // Get number of users displayed
-
+	if (num_itens == 0) // No more pages
+	{
+		ret_value = 1;
+		return (1);
+	}
 	// Put ID and LOGIN in database
 	for (int i = 0; i < num_itens; i++)
 	{
@@ -92,28 +95,47 @@ static size_t	get_id_callback(char *contents, size_t size, size_t nmemb, void *u
 		query_mysql(con, buffer);
 
 	}
+	return (0);
+}
 
-	return 0;
+void	restart_values(void)
+{
+	json.id = NULL;
+	json.login = NULL;
+	json.parsed_json = NULL;
+	json.parsed_jsons = NULL;
+	json.proj_done = NULL;
+	json.proj_dones = NULL;
 }
 
 int	get_information(char *mytoken)
 {
-	CURL *curl = curl_easy_init();
 	struct curl_slist *list = NULL;
+	char	buffer[1024];
+	int	i;
 
-	if(curl)
+	CURLcode res;
+	i = 1;
+	ret_value = 0;
+	list = curl_slist_append(list, mytoken);
+	while (i <= 10)
 	{
-		CURLcode res;
-		curl_easy_setopt(curl, CURLOPT_URL, "https://api.intra.42.fr/v2/users?page[number]=2");
-		list = curl_slist_append(list, mytoken);
-		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, get_id_callback);
-		res = curl_easy_perform(curl);
-		curl_slist_free_all(list);
-		curl_easy_cleanup(curl);
-		return (0);
+		CURL *curl = curl_easy_init();
+		if(curl)
+		{
+			restart_values();
+			sprintf(buffer, "https://api.intra.42.fr/v2/users?page[number]=%i", i);
+			curl_easy_setopt(curl, CURLOPT_URL, buffer);
+			curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
+			curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, get_id_callback);
+			res = curl_easy_perform(curl);
+			curl_easy_cleanup(curl);
+			i++;
+		}
+		else
+			return (1);
 	}
-	return (1);
+	return (0);
 }
 
 void	query_mysql(MYSQL *con, const char *s)
@@ -147,7 +169,7 @@ int main(void)
 	query_mysql(con, "CREATE DATABASE IF NOT EXISTS api");
 	query_mysql(con, "USE api");
 	query_mysql(con, "DROP TABLE IF EXISTS students");
-	query_mysql(con, "CREATE TABLE students(id INT PRIMARY KEY, login VARCHAR(30), projects_done TINYINT);");
+	query_mysql(con, "CREATE TABLE students(id INT, login VARCHAR(30), projects_done TINYINT);");
 
 	// Get Token
 	get_token();
