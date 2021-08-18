@@ -6,7 +6,7 @@
 /*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 15:53:11 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/18 11:30:00 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/18 12:00:36 by maraurel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,6 @@ static const char *s_root_dir = ".";
 
 struct json_datas	json;
 MYSQL *con;
-
-struct data
-{
-	char	*content;
-	char	*token;
-};
 
 struct data *data;
 
@@ -45,7 +39,7 @@ static void fn(struct mg_connection *c, int ev, void *ev_data, void *fn_data)
 	(void) s_root_dir;
 }
 
-static size_t	writecallback(char *contents, size_t size, size_t nmemb, void *userp)
+static size_t	get_token_callback(char *contents, size_t size, size_t nmemb, void *userp)
 {
 	size_t realsize = size * nmemb;
 	data = (struct data *) userp;
@@ -64,7 +58,7 @@ int	get_token(void)
 		CURLcode res;
 		curl_easy_setopt(curl, CURLOPT_URL, "https://api.intra.42.fr/oauth/token");
 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, ACCESS_API_INFO);
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writecallback);
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, get_token_callback);
 		res = curl_easy_perform(curl);
 		if(res != CURLE_OK)
 		{
@@ -77,6 +71,22 @@ int	get_token(void)
 	return (1);
 }
 
+static size_t	get_id_callback(char *contents, size_t size, size_t nmemb, void *userp)
+{
+	size_t realsize = size * nmemb;
+	data = (struct data *) userp;
+
+	data->content = contents;
+	json.parsed_json = json_tokener_parse(data->content);
+	json_object_object_get_ex(json.parsed_json, "id", &json.id);
+	data->id = json_object_get_int(json.id);
+
+	json_object_object_get_ex(json.parsed_json, "login", &json.login);
+	data->login = json_object_get_string(json.login);
+	printf("%i\n %s\n", data->id, data->login);
+	return realsize;
+}
+
 int	get_information(char *mytoken)
 {
 	CURL *curl = curl_easy_init();
@@ -85,10 +95,10 @@ int	get_information(char *mytoken)
 	if(curl)
 	{
 		CURLcode res;
-		curl_easy_setopt(curl, CURLOPT_URL, "https://api.intra.42.fr/v2/me");
+		curl_easy_setopt(curl, CURLOPT_URL, "https://api.intra.42.fr/v2/users");
 		list = curl_slist_append(list, mytoken);
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
-
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, get_id_callback);
 		res = curl_easy_perform(curl);
 		if(res != CURLE_OK)
 		{
@@ -124,14 +134,17 @@ int main(void)
 		fprintf(stderr, "%s\n", mysql_error(con));
 		exit(1);
 	}
-	if (mysql_real_connect(con, "localhost", "root", "Password1$", "api", 0, NULL, 0) == NULL)
+	if (mysql_real_connect(con, "localhost", "root", "Password1$", NULL, 0, NULL, 0) == NULL)
 	{
 		fprintf(stderr, "%s\n", mysql_error(con));
 		mysql_close(con);
 		exit(1);
 	}
+	query_mysql(con, "CREATE DATABASE IF NOT EXISTS api");
+	query_mysql(con, "USE api");
 	query_mysql(con, "DROP TABLE IF EXISTS students");
-	query_mysql(con, "CREATE TABLE students(id INT PRIMARY KEY, name VARCHAR(30), projects_done TINYINT);");
+	query_mysql(con, "CREATE TABLE students(id INT PRIMARY KEY, login VARCHAR(30), projects_done TINYINT);");
+
 	// Get Token
 	get_token();
 	json.parsed_json = json_tokener_parse(data->content);

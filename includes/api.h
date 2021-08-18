@@ -6,7 +6,7 @@
 /*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 20:17:41 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/18 09:42:48 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/18 11:58:44 by maraurel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,19 @@ struct	json_datas
 {
 	struct json_object *parsed_json;
 	struct json_object *token;
+
+	struct json_object *id;
+	struct json_object *login;
+	struct json_object *proj_done;
+};
+
+struct data
+{
+	char	*content;
+
+	int	id;
+	const char	*login;
+	char	*proj_done;
 };
 
 char	*ft_strjoin(char const *s1, char const *s2);
