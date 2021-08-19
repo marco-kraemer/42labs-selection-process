@@ -6,7 +6,7 @@
 /*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 15:53:11 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/19 17:58:29 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/19 18:11:01 by maraurel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,17 @@ int	get_datas(char *user)
 	return 0;
 }
 
+char	*get_from_db(char *column)
+{
+	char	buffer[1048];
+
+	sprintf(buffer, "SELECT %s FROM students", column);
+	query_mysql(con, buffer);
+	MYSQL_RES *result = mysql_store_result(con);
+	MYSQL_ROW row = mysql_fetch_row(result);
+	return (row[0]);
+}
+
 static void fn(struct mg_connection *c, int ev, void *ev_data, void *fn_data)
 {
 	if (ev == MG_EV_HTTP_MSG)
@@ -120,15 +131,13 @@ static void fn(struct mg_connection *c, int ev, void *ev_data, void *fn_data)
 		if (strcmp(login, row[0]) == 0)
 		{
 			get_datas(login);
-			
-			// DISPLAY CORRECTION_POINTS
-			query_mysql(con, "SELECT correction_points FROM students");
-			MYSQL_RES *result = mysql_store_result(con);
-			MYSQL_ROW row = mysql_fetch_row(result);
-			char *correction_point = row[0];
-
-			mg_http_reply(c, 200,"Content-Type: application/json\r\n", "{\"login\": %s, \"correction_points\": %s}"
-			, login, correction_point);
+			char *correction_point = get_from_db("correction_points"); // GET CORRECTION_POINTS
+			char *wallet = get_from_db("wallet"); // GET WALLET
+			char *num_projects = get_from_db("num_projects");
+			char *av_grade = get_from_db("av_grade");
+			mg_http_reply(c, 200,"Content-Type: application/json\r\n",
+			"{\"login\": %s, \"correction_points\": %s, \"wallet\": %s, \"number_of_projects_done\": %s, \"average_grade\": %s}"
+			, login, correction_point, wallet, num_projects, av_grade);
 		}
 		else
 		{
