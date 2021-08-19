@@ -6,7 +6,7 @@
 /*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 15:53:11 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/19 14:47:52 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/19 17:58:29 by maraurel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,6 @@ struct json_datas	json;
 struct data 		*data;
 MYSQL 			*con;
 char			*mytoken;
-
-struct string
-{
-	char	*ptr;
-	size_t	len;
-};
 
 void init_string(struct string *s)
 {
@@ -51,6 +45,41 @@ size_t writefunc(void *ptr, size_t size, size_t nmemb, struct string *s)
 	return size*nmemb;
 }
 
+void	save_datas_db(char *content)
+{
+	char	buffer[1048];
+
+	json.parsed_jsons = json_tokener_parse(content);
+
+	// GET CORRECTION POINTS
+	json_object_object_get_ex(json.parsed_jsons, "correction_point", &json.correction_points);
+	// GET COINS IN WALLET
+	json_object_object_get_ex(json.parsed_jsons, "wallet", &json.wallet);
+	// GET DATA USER HAS BEEN CREATED
+	json_object_object_get_ex(json.parsed_jsons, "created_at", &json.start_date);
+	
+	// GET NUMBER OF PROJECTS ENROLLED (INCLUDING POOL)
+	json_object_object_get_ex(json.parsed_jsons, "projects_users", &json.projects_users);
+	int	n_projects = json_object_array_length(json.projects_users);
+	
+	// GET AVERAGE GRADE
+	int	av_grade = 0;
+	for (int i = 0; i < n_projects; i++)
+	{
+		json.project = json_object_array_get_idx(json.projects_users, i);
+		json_object_object_get_ex(json.project, "final_mark", &json.project_grade);
+		av_grade += json_object_get_int(json.project_grade);
+		if (av_grade == (int)NULL)
+			n_projects--;
+	}
+	av_grade = av_grade / n_projects;
+
+	sprintf(buffer, "UPDATE students SET correction_points=%i, wallet=%i, start_date=\'%s\', num_projects=%i, av_grade=%i WHERE id=%i",
+	json_object_get_int(json.correction_points), json_object_get_int(json.wallet),
+	json_object_get_string(json.start_date), n_projects, av_grade, (int)data->id);
+	query_mysql(con, buffer);
+}
+
 int	get_datas(char *user)
 {
 	CURLcode res;
@@ -69,8 +98,7 @@ int	get_datas(char *user)
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &s);
 		res = curl_easy_perform(curl);
-
-		printf("%s\n", s.ptr);
+		save_datas_db(s.ptr);
 		free(s.ptr);
 
 		/* always cleanup */
@@ -92,7 +120,15 @@ static void fn(struct mg_connection *c, int ev, void *ev_data, void *fn_data)
 		if (strcmp(login, row[0]) == 0)
 		{
 			get_datas(login);
-			mg_http_reply(c, 200,"Content-Type: application/json\r\n", "{\"result\": %s}", login);
+			
+			// DISPLAY CORRECTION_POINTS
+			query_mysql(con, "SELECT correction_points FROM students");
+			MYSQL_RES *result = mysql_store_result(con);
+			MYSQL_ROW row = mysql_fetch_row(result);
+			char *correction_point = row[0];
+
+			mg_http_reply(c, 200,"Content-Type: application/json\r\n", "{\"login\": %s, \"correction_points\": %s}"
+			, login, correction_point);
 		}
 		else
 		{
@@ -206,7 +242,7 @@ int main(void)
 	query_mysql(con, "CREATE DATABASE IF NOT EXISTS api");
 	query_mysql(con, "USE api");
 	query_mysql(con, "DROP TABLE IF EXISTS students");
-	query_mysql(con, "CREATE TABLE students(id INT, login VARCHAR(30), correction_points SMALLINT, wallet INT, start_data VARCHAR(30), num_projects SMALLINT);");
+	query_mysql(con, "CREATE TABLE students(id INT, login VARCHAR(30), correction_points SMALLINT, wallet INT, start_date VARCHAR(30), num_projects SMALLINT, av_grade TINYINT);");
 
 	// Get Token
 	get_token();
