@@ -6,7 +6,7 @@
 /*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/19 18:27:12 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/19 18:30:14 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/19 19:56:30 by maraurel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	create_db(void)
 	query_mysql(con, "CREATE DATABASE IF NOT EXISTS api");
 	query_mysql(con, "USE api");
 	query_mysql(con, "DROP TABLE IF EXISTS students");
-	query_mysql(con, "CREATE TABLE students(id INT, login VARCHAR(30), correction_points SMALLINT, wallet INT, start_date VARCHAR(30), num_projects SMALLINT, av_grade TINYINT);");
+	query_mysql(con, "CREATE TABLE students(id INT, login VARCHAR(30), correction_points SMALLINT, wallet INT, start_date VARCHAR(30), num_projects SMALLINT, av_grade TINYINT, highest_grade TINYINT, lowest_grade TINYINT, days_finish_project SMALLINT, hours_finish_project SMALLINT);");
 }
 
 void	query_mysql(MYSQL *con, const char *s)

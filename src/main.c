@@ -6,7 +6,7 @@
 /*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 15:53:11 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/19 18:33:42 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/19 20:45:01 by maraurel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ void	save_info_db(char *content)
 	json_object_object_get_ex(json.parsed_jsons, "projects_users", &json.projects_users);
 	int	n_projects = json_object_array_length(json.projects_users);
 	
-	// GET AVERAGE GRADE
-	int	av_grade = 0;
+	// GET AVERAGE, LOWEST AND HIGHEST GRADE
+	int	av_grade = 0, high_grade = 0, old_high_grade = 0, low_grade = 120, old_low_grade = 120;
 	for (int i = 0; i < n_projects; i++)
 	{
 		json.project = json_object_array_get_idx(json.projects_users, i);
@@ -52,12 +52,26 @@ void	save_info_db(char *content)
 		av_grade += json_object_get_int(json.project_grade);
 		if (av_grade == (int)NULL)
 			n_projects--;
+		
+		high_grade = json_object_get_int(json.project_grade);
+		if (high_grade > old_high_grade)
+			old_high_grade = high_grade;
+
+		low_grade = json_object_get_int(json.project_grade);
+		if (low_grade < old_low_grade)
+			old_low_grade = low_grade;
 	}
+	low_grade = old_low_grade;
+	high_grade = old_high_grade;
 	av_grade = av_grade / n_projects;
 
-	sprintf(buffer, "UPDATE students SET correction_points=%i, wallet=%i, start_date=\'%s\', num_projects=%i, av_grade=%i WHERE id=%i",
+	// GET DAYS TO FINISH A PROJECT
+	char	*start_date = (char *)json_object_get_string(json.start_date);
+	start_date = ft_substr(start_date, 0, 10);
+
+	sprintf(buffer, "UPDATE students SET correction_points=%i, wallet=%i, start_date=\'%s\', num_projects=%i, av_grade=%i, highest_grade=%i, lowest_grade=%i  WHERE id=%i",
 	json_object_get_int(json.correction_points), json_object_get_int(json.wallet),
-	json_object_get_string(json.start_date), n_projects, av_grade, (int)data->id);
+	start_date, n_projects, av_grade, high_grade, low_grade, (int)data->id);
 	query_mysql(con, buffer);
 }
 
@@ -126,11 +140,13 @@ static void server(struct mg_connection *c, int ev, void *ev_data, void *fn_data
 			get_all_info(login);
 			char *correction_point = get_from_db("correction_points"); // GET CORRECTION_POINTS
 			char *wallet = get_from_db("wallet"); // GET WALLET
-			char *num_projects = get_from_db("num_projects");
-			char *av_grade = get_from_db("av_grade");
+			char *num_projects = get_from_db("num_projects"); // GET NUMBER OF PROJECTS DONE
+			char *av_grade = get_from_db("av_grade"); // GET AVERAGE GRADE
+			char *high_grade = get_from_db("highest_grade"); // GET HIGHEST GRADE
+			char *low_grade = get_from_db("lowest_grade"); // LOWEST GRADE
 			mg_http_reply(c, 200,"Content-Type: application/json\r\n",
-			"{\"login\": %s, \"correction_points\": %s, \"wallet\": %s, \"number_of_projects_done\": %s, \"average_grade\": %s}"
-			, login, correction_point, wallet, num_projects, av_grade);
+			"{\"login\": %s, \"correction_points\": %s, \"wallet\": %s, \"number_of_projects_done\": %s, \"highest_grade\": %s, \"lowest_grade\": %s, \"average_grade\": %s}"
+			, login, correction_point, wallet, num_projects, high_grade, low_grade, av_grade);
 		}
 		else
 		{

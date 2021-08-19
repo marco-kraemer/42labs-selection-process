@@ -4,10 +4,16 @@
 Esse projeto consiste em uma API para uma aplicação de análise estátistica de alunos da 42. 
 Após a aplicação receber o `login` do aluno, deve retornar informações e análises buscadas na [API oficial da Intra](https://api.intra.42.fr/). Essas informações são colocadas em um banco de dados.
 
-## **Ferramentas utilizadas**
+# **Informações sobre a API**
+
+## **Ferramentas e bibliotecas utilizadas**
 
 ### MySQL
 
 ### Mongoose
 
 ### Json-c e Mjson
+
+### Libcurl
+
+## **Modo de uso**
