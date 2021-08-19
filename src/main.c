@@ -6,7 +6,7 @@
 /*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 15:53:11 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/18 20:39:59 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/18 23:23:58 by maraurel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,12 @@ static void fn(struct mg_connection *c, int ev, void *ev_data, void *fn_data)
 	if (ev == MG_EV_HTTP_MSG)
 	{
 		struct mg_http_message *hm = (struct mg_http_message *) ev_data;
-		if (mg_http_match_uri(hm, "/helloworld"))
+		if (mg_http_match_uri(hm, "/maraurel"))
 		{
-			mg_http_reply(c, 200, "", json_object_get_string(json.token));
+			query_mysql(con, "SELECT login FROM students");
+			MYSQL_RES *result = mysql_store_result(con);
+			MYSQL_ROW row = mysql_fetch_row(result);
+			mg_http_reply(c, 200,"Content-Type: application/json\r\n", "{\"result\": %s}", row[0]);
 		}
 		else
 		{
