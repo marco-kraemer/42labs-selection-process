@@ -6,7 +6,7 @@
 /*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 20:17:41 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/19 17:48:35 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/19 18:30:26 by maraurel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,18 +54,29 @@ struct data
 
 	char	*login;
 	double	id;
-
-	double	correction_point;
-	double	wallet;
-	char	*start_data;
-	double	num_projects;
 };
 
+// DATABASE
 void		query_mysql(MYSQL *con, const char *s);
+void		create_db(void);
+char		*get_from_db(char *column);
 
+// FT
 char		*ft_strjoin(char const *s1, char const *s2);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
 
+// GET
 int		get_id_login(char *user);
+int		get_token(void);
+
+// CALLBACK
+size_t		get_id_login_callback(char *content, size_t size, size_t nmemb, void *userp);
+size_t 		writefunc(void *ptr, size_t size, size_t nmemb, struct string *s);
+size_t		get_token_callback(char *contents, size_t size, size_t nmemb, void *userp);
+
+extern struct json_datas	json;
+extern struct data 		*data;
+extern MYSQL 			*con;
+extern char			*mytoken;
 
 #endif
