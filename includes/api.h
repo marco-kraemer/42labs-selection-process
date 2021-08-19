@@ -6,7 +6,7 @@
 /*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 20:17:41 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/18 20:37:11 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/19 00:05:41 by maraurel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,11 @@ struct data
 	char	*proj_done;
 };
 
-char		*ft_strjoin(char const *s1, char const *s2);
 void		query_mysql(MYSQL *con, const char *s);
+
+char		*ft_strjoin(char const *s1, char const *s2);
+char		*ft_substr(char const *s, unsigned int start, size_t len);
+
+int		get_information(char *user);
 
 #endif

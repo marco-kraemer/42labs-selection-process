@@ -6,7 +6,7 @@
 /*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 15:53:11 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/18 23:23:58 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/19 00:31:46 by maraurel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,22 @@ static const char *s_root_dir = ".";
 struct json_datas	json;
 struct data 		*data;
 MYSQL 			*con;
-int			ret_value;
+char			*mytoken;
+
 
 static void fn(struct mg_connection *c, int ev, void *ev_data, void *fn_data)
 {
 	if (ev == MG_EV_HTTP_MSG)
 	{
 		struct mg_http_message *hm = (struct mg_http_message *) ev_data;
-		if (mg_http_match_uri(hm, "/maraurel"))
+		char	*url = ft_substr(hm->uri.ptr, 1, hm->uri.len - 1);
+		get_information(url);
+		query_mysql(con, "SELECT login FROM students");
+		MYSQL_RES *result = mysql_store_result(con);
+		MYSQL_ROW row = mysql_fetch_row(result);
+		if (strcmp(url, row[0]) == 0)
 		{
-			query_mysql(con, "SELECT login FROM students");
-			MYSQL_RES *result = mysql_store_result(con);
-			MYSQL_ROW row = mysql_fetch_row(result);
-			mg_http_reply(c, 200,"Content-Type: application/json\r\n", "{\"result\": %s}", row[0]);
+			mg_http_reply(c, 200,"Content-Type: application/json\r\n", "{\"result\": %s}", url);
 		}
 		else
 		{
@@ -87,24 +90,29 @@ static size_t	get_id_callback(char *content, size_t size, size_t nmemb, void *us
 	(void)size;
 	(void)nmemb;
 	(void)userp;
-	return 0;
+	return (0);
 }
 
-int	get_information(char *mytoken)
+int	get_information(char *user)
 {
 	CURL *curl = curl_easy_init();
 	struct curl_slist *list = NULL;
+	char	buffer[1024];
+	static int count;
 
 	if(curl)
 	{
 		CURLcode res;
-		curl_easy_setopt(curl, CURLOPT_URL, "https://api.intra.42.fr/v2/users/maraurel");
+		query_mysql(con, "DELETE FROM students");
+		sprintf(buffer, "https://api.intra.42.fr/v2/users/%s", user);
+		curl_easy_setopt(curl, CURLOPT_URL, buffer);
 		list = curl_slist_append(list, mytoken);
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, get_id_callback);
 		res = curl_easy_perform(curl);
 		curl_slist_free_all(list);
 		curl_easy_cleanup(curl);
+		count++;
 		return (0);
 	}
 	return (1);
@@ -123,7 +131,6 @@ void	query_mysql(MYSQL *con, const char *s)
 int main(void)
 {
 
-	char	*mytoken;
 
 	con = mysql_init(NULL);
 	// Create database
@@ -149,16 +156,6 @@ int main(void)
 	json_object_object_get_ex(json.parsed_json, "access_token", &json.token);
 	mytoken = ft_strjoin("Authorization: Bearer ", json_object_get_string(json.token));
 	
-	// Get all intra information
-	get_information(mytoken);
-	
-	// Parser information using json
-	// Todo
-	
-	// Send informations to a database
-	// TODO
-
-
 	// Event manager
 	struct mg_mgr	mgr;
 	// Initialise event manager
