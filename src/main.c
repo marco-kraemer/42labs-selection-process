@@ -6,7 +6,7 @@
 /*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 15:53:11 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/20 10:12:37 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/20 10:51:09 by maraurel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,21 +167,21 @@ static void server(struct mg_connection *c, int ev, void *ev_data, void *fn_data
 		if (strcmp(login, row[0]) == 0)
 		{
 			get_all_info(login);
-			char *correction_point = get_from_db("correction_points"); // GET CORRECTION_POINTS
-			char *wallet = get_from_db("wallet"); // GET WALLET
-			char *num_projects = get_from_db("num_projects"); // GET NUMBER OF PROJECTS DONE
-			char *total_attempts = get_from_db("total_attempts"); // TOTAL ATTEMPS
-			char *av_grade = get_from_db("av_grade"); // GET AVERAGE GRADE
-			char *high_grade = get_from_db("highest_grade"); // GET HIGHEST GRADE
-			char *low_grade = get_from_db("lowest_grade"); // LOWEST GRADE
-			char *days42 = get_from_db("days_in_42");
+			int correction_point = atoi(get_from_db("correction_points")); // GET CORRECTION_POINTS
+			int wallet = atoi(get_from_db("wallet")); // GET WALLET
+			int num_projects = atoi(get_from_db("num_projects")); // GET NUMBER OF PROJECTS DONE
+			int total_attempts = atoi(get_from_db("total_attempts")); // TOTAL ATTEMPS
+			int av_grade = atoi(get_from_db("av_grade")); // GET AVERAGE GRADE
+			int high_grade = atoi(get_from_db("highest_grade")); // GET HIGHEST GRADE
+			int low_grade = atoi(get_from_db("lowest_grade")); // LOWEST GRADE
+			int days42 = atoi(get_from_db("days_in_42"));
 			char *level = get_from_db("level"); // LEVEL
-			char *num_achievements = get_from_db("num_achievements"); // NUMBER OF ACHIEVEMENTS
+			int num_achievements = atoi(get_from_db("num_achievements")); // NUMBER OF ACHIEVEMENTS
 			mg_http_reply(c, 200,"Content-Type: application/json\r\n",
-			"{\"login\": %s, \"correction_points\": %s, \"wallet\": %s, \"average_wallet_increase_per_project\": %i,\"number_of_projects_done\": %s, \"number_of_attempts\":%s, \"highest_grade\": %s, \"lowest_grade\": %s, \"average_grade\": %s, \"days_in_42\":%s, \"days_finish_a_project\":%i, \"hours_finish_a_project\":%i, \"average_number_of_attempt_per_project\": %i, \"level\": %s, \"number_achievements\": %s}"
-			, login, correction_point, wallet, (atoi(wallet) / atoi(num_projects)), num_projects, total_attempts, high_grade, low_grade, av_grade,
-			days42, (atoi(days42) / atoi(num_projects)), ((atoi(days42) / atoi(num_projects)) * 24),
-			(atoi(total_attempts) / atoi(num_projects)), level, num_achievements);
+			"{\"login\": %s, \"correction_points\": %i, \"wallet\": %i, \"average_wallet_increase_per_project\": %f, \"number_of_projects_done\": %i, \"number_of_attempts\":%i, \"highest_grade\": %i, \"lowest_grade\": %i, \"average_grade\": %i, \"days_in_42\":%i, \"days_finish_a_project\": %f, \"hours_finish_a_project\": %f, \"average_number_of_attempts_per_project\": %f, \"level\": %s, \"number_achievements\": %i}"
+			, login, correction_point, wallet, ((float)wallet / (float)num_projects), num_projects, total_attempts, high_grade, low_grade, av_grade,
+			days42, ((float)days42 / (float)num_projects), (((float)days42 / (float)num_projects) * (float)24),
+			((float)total_attempts / (float) num_projects), level, num_achievements);
 		}
 		else
 		{
