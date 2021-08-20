@@ -6,7 +6,7 @@
 /*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 20:17:41 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/19 20:41:08 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/19 23:08:45 by maraurel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,12 @@ struct	json_datas
 	struct json_object *projects_users;
 	struct json_object *project;
 		struct json_object *project_grade;
+	
+	struct json_object *cursus_users;
+		struct json_object *level;
+		struct json_object *skills;
+			struct json_object *skill;
+				struct json_object *other_levels;
 };
 
 struct data
