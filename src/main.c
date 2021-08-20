@@ -6,7 +6,7 @@
 /*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 15:53:11 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/20 11:56:39 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/20 12:03:50 by maraurel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,31 +167,24 @@ static void server(struct mg_connection *c, int ev, void *ev_data, void *fn_data
 			mg_http_reply(c, 404, "", "Student not found\n", (int) hm->uri.len, hm->uri.ptr);
 		else
 		{
-			sprintf(buffer, "SELECT login FROM students WHERE id=%i", (int)data->id);
-			query_mysql(con, buffer);
-			MYSQL_RES *result = mysql_store_result(con);
-			MYSQL_ROW row = mysql_fetch_row(result);
-			if (strcmp(login, row[0]) == 0)
-			{
-				get_all_info(login);
-				int correction_point = atoi(get_from_db("correction_points")); // GET CORRECTION_POINTS
-				int wallet = atoi(get_from_db("wallet")); // GET WALLET
-				int num_projects = atoi(get_from_db("num_projects")); // GET NUMBER OF PROJECTS DONE
-				int total_attempts = atoi(get_from_db("total_attempts")); // TOTAL ATTEMPS
-				int av_grade = atoi(get_from_db("av_grade")); // GET AVERAGE GRADE
-				int high_grade = atoi(get_from_db("highest_grade")); // GET HIGHEST GRADE
-				int low_grade = atoi(get_from_db("lowest_grade")); // LOWEST GRADE
-				int days42 = atoi(get_from_db("days_in_42"));
-				char *level = get_from_db("level"); // LEVEL
-				int num_achievements = atoi(get_from_db("num_achievements")); // NUMBER OF ACHIEVEMENTS
-				mg_http_reply(c, 200,"Content-Type: application/json\r\n",
-				"{\"login\": %s, \"correction_points\": %i, \"wallet\": %i, \"average_wallet_increase_per_project\": %f, \"number_of_projects_done\": %i, \"number_of_attempts\":%i, \"highest_grade\": %i, \"lowest_grade\": %i, \"average_grade\": %i, \"days_in_42\":%i, \"days_finish_a_project\": %f, \"hours_finish_a_project\": %f, \"average_number_of_attempts_per_project\": %f, \"level\": %s, \"number_achievements\": %i}"
-				, login, correction_point, wallet, ((float)wallet / (float)num_projects), num_projects, total_attempts, high_grade, low_grade, av_grade,
-				days42, ((float)days42 / (float)num_projects), (((float)days42 / (float)num_projects) * (float)24),
-				((float)total_attempts / (float) num_projects), level, num_achievements);
-			}
-			free(login);
+			get_all_info(login);
+			int correction_point = atoi(get_from_db("correction_points")); // GET CORRECTION_POINTS
+			int wallet = atoi(get_from_db("wallet")); // GET WALLET
+			int num_projects = atoi(get_from_db("num_projects")); // GET NUMBER OF PROJECTS DONE
+			int total_attempts = atoi(get_from_db("total_attempts")); // TOTAL ATTEMPS
+			int av_grade = atoi(get_from_db("av_grade")); // GET AVERAGE GRADE
+			int high_grade = atoi(get_from_db("highest_grade")); // GET HIGHEST GRADE
+			int low_grade = atoi(get_from_db("lowest_grade")); // LOWEST GRADE
+			int days42 = atoi(get_from_db("days_in_42"));
+			char *level = get_from_db("level"); // LEVEL
+			int num_achievements = atoi(get_from_db("num_achievements")); // NUMBER OF ACHIEVEMENTS
+			mg_http_reply(c, 200,"Content-Type: application/json\r\n",
+			"{\"login\": %s, \"correction_points\": %i, \"wallet\": %i, \"average_wallet_increase_per_project\": %f, \"number_of_projects_done\": %i, \"number_of_attempts\":%i, \"highest_grade\": %i, \"lowest_grade\": %i, \"average_grade\": %i, \"days_in_42\":%i, \"days_finish_a_project\": %f, \"hours_finish_a_project\": %f, \"average_number_of_attempts_per_project\": %f, \"level\": %s, \"number_achievements\": %i}"
+			, login, correction_point, wallet, ((float)wallet / (float)num_projects), num_projects, total_attempts, high_grade, low_grade, av_grade,
+			days42, ((float)days42 / (float)num_projects), (((float)days42 / (float)num_projects) * (float)24),
+			((float)total_attempts / (float) num_projects), level, num_achievements);
 		}
+		free(login);
 	}
 	(void) fn_data;
 	(void) s_root_dir;
