@@ -6,7 +6,7 @@
 /*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/19 18:27:12 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/20 12:16:43 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/20 15:30:19 by maraurel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	create_db(void)
 		fprintf(stderr, "%s\n", mysql_error(con));
 		exit(1);
 	}
-	if (mysql_real_connect(con, "localhost", "root", "password", NULL, 0, NULL, 0) == NULL)
+	if (mysql_real_connect(con, "localhost", "root", DB_PASSWORD, NULL, 0, NULL, 0) == NULL)
 	{
 		fprintf(stderr, "%s\n", mysql_error(con));
 		mysql_close(con);
