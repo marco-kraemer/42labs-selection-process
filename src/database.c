@@ -6,7 +6,7 @@
 /*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/19 18:27:12 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/20 10:09:56 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/20 11:40:48 by maraurel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*get_from_db(char *column)
 {
 	char	buffer[1048];
 
-	sprintf(buffer, "SELECT %s FROM students", column);
+	sprintf(buffer, "SELECT %s FROM students WHERE id=%i", column, (int)data->id);
 	query_mysql(con, buffer);
 	MYSQL_RES *result = mysql_store_result(con);
 	MYSQL_ROW row = mysql_fetch_row(result);
