@@ -1,0 +1,12 @@
+Configurar bibliotecas
+	sudo apt update
+	sudo apt install mysql-server
+	sudo apt-get install libmysqlclient18-dev
+	sudo apt-get install libcurl4-openssl-dev
+	sudo apt install libjson-c-dev
+
+Configurar base de dados
+	sudo systemctl start mysql
+	sudo mysql_secure_installation
+	sudo mysql -u root -p
+	ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'; flush privileges;
