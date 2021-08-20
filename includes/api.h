@@ -6,7 +6,7 @@
 /*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 20:17:41 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/19 23:08:45 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/20 09:36:39 by maraurel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,18 @@
 #include <time.h>
 
 #define ACCESS_API_INFO "grant_type=client_credentials&client_id=1a36175e33092d0d70acdf23600c9d9ceaf7fdc1146e8db6e2b609a6d90786e9&client_secret=73d987f5a96286c186f5c72f4c28393d84733bcd26a13e3679dd6b0fab4f0ba9"
+
+struct date
+{
+	int	day;
+	int	month;
+	int	year;
+};
+
+struct Date2
+{
+	int	d, m ,y;
+};
 
 struct string
 {
@@ -43,16 +55,17 @@ struct	json_datas
 	struct json_object *wallet;
 	
 	struct json_object *start_date;
-	
+	struct json_object *updated_date;
+
 	struct json_object *projects_users;
 	struct json_object *project;
 		struct json_object *project_grade;
+		struct json_object *occurrence;
 	
 	struct json_object *cursus_users;
 		struct json_object *level;
-		struct json_object *skills;
-			struct json_object *skill;
-				struct json_object *other_levels;
+
+	struct json_object	*achievements;
 };
 
 struct data
@@ -62,6 +75,9 @@ struct data
 	char	*login;
 	double	id;
 };
+
+// Extra
+int	getDifferenceDates(struct Date2 dt1, struct Date2 dt2);
 
 // DATABASE
 void		query_mysql(MYSQL *con, const char *s);
