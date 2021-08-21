@@ -53,4 +53,22 @@ Para parar os containers, execute:
 docker-compose stop
 ```
 
+## **Informações retornadas**
+**Todas as informações são com base na última atualização**
+- login
+- Pontos de correção
+- Carteira
+- Aumento médio da carteira por projeto
+- Número de projetos feitos
+- Total de tentativas
+- Maior nota
+- Menor nota
+- Nota média
+- Total de dias na 42
+- Dias necessários para finalizar um projeto
+- Horas necessárias para finalizar um projeto
+- Média de tentativas por projeto
+- Level
+- Número de conquistas
+
 ## **Funcionamento**
