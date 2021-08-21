@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 20:17:41 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/21 11:14:07 by user42           ###   ########.fr       */
+/*   Updated: 2021/08/21 16:10:12 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ int	getDifferenceDates(struct Date2 dt1, struct Date2 dt2);
 void		query_mysql(MYSQL *con, const char *s);
 void		create_db(void);
 char		*get_from_db(char *column);
+
+int		get_all_info(char *user);
 
 // FT
 char		*ft_strjoin(char const *s1, char const *s2);

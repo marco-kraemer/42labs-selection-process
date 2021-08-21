@@ -26,7 +26,7 @@ docker-compose up -d
 
 Após isso, podemos acessar a seguinte url, substituindo `login` pelo login de algum aluno, para ter acesso às estatísticas:
 ```
-http:://localhost:3000/login
+http://localhost:3000/login
 ```
 
 Toda vez que inserimos um `login` diferente, alguns dados são armazenados na base de dados (mySQL). Podemos verificar esse processo realizando os seguintes comandos:

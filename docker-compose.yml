@@ -10,7 +10,7 @@ services:
             - app-connect
         restart: always
         ports: 
-            - '3306:3306'
+            - '3316:3316'
     api:
         build: "."
         container_name: api_container

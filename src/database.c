@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   database.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/19 18:27:12 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/20 15:30:19 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/21 16:18:06 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	create_db(void)
 		fprintf(stderr, "%s\n", mysql_error(con));
 		exit(1);
 	}
-	if (mysql_real_connect(con, "localhost", "root", DB_PASSWORD, NULL, 0, NULL, 0) == NULL)
+	if (mysql_real_connect(con, "mysql_container", "root", DB_PASSWORD, NULL, 0, NULL, 0) == NULL)
 	{
 		fprintf(stderr, "%s\n", mysql_error(con));
 		mysql_close(con);
