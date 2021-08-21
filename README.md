@@ -39,7 +39,7 @@ docker exec -it mysql_container /bin/bash
 ```
 mysql -u root -p
 ```
-3-) Insira a senha que será solicitada: *password*
+3-) Insira a senha: **password**
 4-) Selecione a base de dados *api*
 ```
 USE API
@@ -48,3 +48,9 @@ USE API
 ```
 SELECT * FROM students
 ```
+Para parar os containers, execute:
+```
+docker-compose stop
+```
+
+## **Funcionamento**
