@@ -42,7 +42,7 @@ mysql -u root -p
 3-) Insira a senha: **password**
 4-) Selecione a base de dados *api*
 ```
-USE API
+USE api
 ```
 5-) Selecione os dados da tabela *students*
 ```

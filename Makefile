@@ -14,7 +14,7 @@ FLAGS = #-Wall -Wextra -Werror
 all: $(NAME) $(OBJ)
 
 $(NAME): $(OBJ)
-	@$(CC) mongoose.c mjson.c $(FLAGS) $(OBJ) -lmysqlclient -lcurl -ljson-c -o $(NAME)
+	@$(CC) libraries/mongoose.c libraries/mjson.c $(FLAGS) $(OBJ) -lmysqlclient -lcurl -ljson-c -o $(NAME)
 
 $(OBJ_PATH)/%.o:	$(SRC_PATH)/%.c
 	@$(CC) -g $(FLAGS) -c $< -o $@

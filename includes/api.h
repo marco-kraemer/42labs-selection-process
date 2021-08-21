@@ -3,28 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   api.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 20:17:41 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/20 15:30:06 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/21 11:14:07 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef	API_H
 #define	API_H
 
-#include "../mongoose.h"
+#include "../libraries/mongoose.h"
 #include <stdio.h>
 #include <mysql/mysql.h>
 #include <curl/curl.h>
 #include <json-c/json.h>
 #include <string.h>
 #include <mysql/mysql.h>
-#include "../mjson.h"
+#include "../libraries/mjson.h"
 #include <time.h>
 
 #define ACCESS_API_INFO "grant_type=client_credentials&client_id=1a36175e33092d0d70acdf23600c9d9ceaf7fdc1146e8db6e2b609a6d90786e9&client_secret=73d987f5a96286c186f5c72f4c28393d84733bcd26a13e3679dd6b0fab4f0ba9"
 #define DB_PASSWORD "password"
+
+typedef struct oauth2struct
+{
+	char	*client_id;
+	char	*client_secret;
+	char	*redirectUrl;
+	char	*authCode;
+	char	*accesstoken;
+	int	*accesstokenlen;
+} oauth2struct;
 
 struct date
 {
@@ -77,7 +87,7 @@ struct data
 	double	id;
 };
 
-// Extra
+void	server(struct mg_connection *c, int ev, void *ev_data, void *fn_data);
 int	getDifferenceDates(struct Date2 dt1, struct Date2 dt2);
 
 // DATABASE
@@ -102,5 +112,6 @@ extern struct json_datas	json;
 extern struct data 		*data;
 extern MYSQL 			*con;
 extern char			*mytoken;
-
+extern const char		*s_root_dir;
+extern const char		*s_http_addr;
 #endif
