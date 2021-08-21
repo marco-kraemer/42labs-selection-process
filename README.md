@@ -18,39 +18,47 @@ Após a aplicação receber o `login` do aluno, deve retornar informações e an
 - Para fazer as requisições na [API oficial da Intra](https://api.intra.42.fr)
 
 ## **Modo de uso**
+#### Modo 1: Acesso local
 Para iniciar a API basta realizar o comando:
 
 ```
 docker-compose up -d
 ```
 
-Após isso, podemos acessar a seguinte url, substituindo `login` pelo login de algum aluno, para ter acesso às estatísticas:
+Após isso, podemos acessar a seguinte url, substituindo `login` pelo login de um aluno, para ter acesso às estatísticas:
 ```
 http://localhost:3000/login
 ```
 
 Toda vez que inserimos um `login` diferente, alguns dados são armazenados na base de dados (mySQL). Podemos verificar esse processo realizando os seguintes comandos:
 
-1-) Execute o container docker mysql
+- 1-) Execute o container docker mysql
 ```
 docker exec -it mysql_container /bin/bash
 ```
-2-) Acesse o mySQL
+- 2-) Acesse o mySQL
 ```
 mysql -u root -p
 ```
-3-) Insira a senha: **password**
-4-) Selecione a base de dados *api*
+- 3-) Insira a senha: **password**
+- 4-) Selecione a base de dados *api*
 ```
 USE api
 ```
-5-) Selecione os dados da tabela *students*
+- 5-) Selecione os dados da tabela *students*
 ```
 SELECT * FROM students
 ```
 Para parar os containers, execute:
 ```
 docker-compose stop
+```
+
+## Modo 2: Acesso via AmazonEC2
+*Amazon Elastic Compute Cloud, ou EC2 permite que usuários alguem computadores virtuais para rodarem suas próprias aplicações*
+1-) Entre na seguinte url, substituindo `login` pelo login de um aluno:
+```
+http://18.234.230.231:3000/login
 ```
 
 ## **Informações retornadas**
