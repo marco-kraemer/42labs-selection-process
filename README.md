@@ -18,7 +18,7 @@ Após a aplicação receber o `login` do aluno, deve retornar informações e an
 - Para fazer as requisições na [API oficial da Intra](https://api.intra.42.fr)
 
 ## **Modo de uso**
-#### Modo 1: Acesso local
+### Modo 1: Acesso local
 Para iniciar a API basta realizar o comando:
 
 ```
@@ -54,9 +54,9 @@ Para parar os containers, execute:
 docker-compose stop
 ```
 
-## Modo 2: Acesso via AmazonEC2
-*Amazon Elastic Compute Cloud, ou EC2 permite que usuários alguem computadores virtuais para rodarem suas próprias aplicações*
-1-) Entre na seguinte url, substituindo `login` pelo login de um aluno:
+### Modo 2: Acesso via AmazonEC2
+*Amazon Elastic Compute Cloud, ou EC2 permite que usuários aluguem computadores virtuais para rodarem suas próprias aplicações*
+- 1-) Entre na seguinte url, substituindo `login` pelo login de um aluno:
 ```
 http://18.234.230.231:3000/login
 ```
