@@ -7,7 +7,7 @@ OBJ_PATH = ./obj
 SRC = $(notdir $(wildcard ./src/*.c))
 OBJ = $(addprefix $(OBJ_PATH)/, $(SRC:.c=.o))
 
-CC = clang
+CC = gcc
 
 FLAGS = #-Wall -Wextra -Werror
 

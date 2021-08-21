@@ -52,7 +52,7 @@ void	save_info_db(char *content)
 		json_object_object_get_ex(json.project, "occurrence", &json.occurrence);
 		n_occurrence += json_object_get_int(json.occurrence) + 1;
 		av_grade += json_object_get_int(json.project_grade);
-		if (av_grade == (int)NULL)
+		if (av_grade == 0)
 			n_projects--;
 		
 		high_grade = json_object_get_int(json.project_grade);
@@ -156,8 +156,6 @@ int	get_id_login(char *user)
 
 static void server(struct mg_connection *c, int ev, void *ev_data, void *fn_data)
 {
-	char buffer[1048];
-
 	if (ev == MG_EV_HTTP_MSG)
 	{
 		struct mg_http_message *hm = (struct mg_http_message *) ev_data;
@@ -192,8 +190,7 @@ static void server(struct mg_connection *c, int ev, void *ev_data, void *fn_data
 
 int	main(void)
 {
-
-
+	printf("Starting...\n");
 	create_db(); // Create database
 	get_token(); // Get Token
 	struct mg_mgr	mgr; // Event manager
