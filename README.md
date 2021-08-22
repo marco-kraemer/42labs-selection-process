@@ -46,31 +46,31 @@ http://18.234.230.231:3000/login
 ## **Base de dados**
 * Toda vez que inserimos um `login` diferente, alguns dados são armazenados na base de dados (mySQL).  Os dados são salvados em duas tabelas diferentes. A tabela *user* armazena dados pessoais, enquanto a tabela *stats* armazena as estatísticas do usuário. Elas tem o *id* como **Primary Key**.
 * Para verificar esse processo, siga os passos abaixo:
-- Siga os passos do [Modo 1](#modo-1:-acesso-local)
-- Execute o container docker mysql
-```
-docker exec -it mysql_container /bin/bash
-```
-- Acesse o mySQL
-```
-mysql -u root -p
-```
-- Insira a senha: **password**
-- Selecione a base de dados *api*
-```
-USE api
-```
-- Selecione os dados da tabela *user* ou *stats*
-```
-SELECT * FROM user
-```
-```
-SELECT * FROM stats
-```
-Para parar os containers, execute:
-```
-docker-compose stop
-```
+	* Siga os passos do [Modo 1](#modo-1:-acesso-local)
+	- Execute o container docker mysql
+	```
+	docker exec -it mysql_container /bin/bash
+	```
+	- Acesse o mySQL
+	```
+	mysql -u root -p
+	```
+	- Insira a senha: **password**
+	- Selecione a base de dados *api*
+	```
+	USE api
+	```
+	- Selecione os dados da tabela *user* ou *stats*
+	```
+	SELECT * FROM user
+	```
+	```
+	SELECT * FROM stats
+	```
+	Para parar os containers, execute:
+	```
+	docker-compose stop
+	```
 
 ## **Informações retornadas**
 **Todas as informações são com base na última atualização**
