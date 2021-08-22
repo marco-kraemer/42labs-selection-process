@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 20:17:41 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/22 14:35:16 by user42           ###   ########.fr       */
+/*   Updated: 2021/08/22 15:14:07 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,32 +109,25 @@ struct	json_datas
 void	server(struct mg_connection *c, int ev, void *ev_data, void *fn_data);
 int	getDifferenceDates(struct Date2 dt1, struct Date2 dt2);
 
-// DATABASE
 void		query_mysql(MYSQL *con, const char *s);
 void		create_db(void);
 char		*get_from_db(char *column, char *table);
 
-int		get_all_info(char *user);
+int		update_db(char *user);
 
-// FT
 char		*ft_strjoin(char const *s1, char const *s2);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
 
-// GET
 int		get_id_login(char *user);
 int		get_token(void);
-void		get_user_info(void);
+void		get_user_info(struct user *user);
 void		get_stats_info(struct Data *data);
 
-// CALLBACK
-size_t		get_id_login_callback(char *content, size_t size, size_t nmemb, void *userp);
 size_t 		writefunc(void *ptr, size_t size, size_t nmemb, struct string *s);
-size_t		get_token_callback(char *contents, size_t size, size_t nmemb, void *userp);
 
-extern struct json_datas	json;
-extern struct user 		*user;
-extern MYSQL 			*con;
-extern char			*mytoken;
-extern const char		*s_root_dir;
-extern const char		*s_http_addr;
+void	init_string(struct string *s);
+
+extern MYSQL 	*con;
+extern char	*mytoken;
+extern double	id;
 #endif

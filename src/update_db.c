@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/21 11:08:51 by user42            #+#    #+#             */
-/*   Updated: 2021/08/22 14:32:43 by user42           ###   ########.fr       */
+/*   Updated: 2021/08/22 15:18:53 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,14 @@ void init_string(struct string *s)
 }
 
 
-void	save_stats_db(char *content)
+void	update_stats(char *content)
 {
 	struct json_datas	json;
 
 	json.parsed_jsons = json_tokener_parse(content);
-	json_object_object_get_ex(json.parsed_jsons, "correction_point", &json.correction_points); // GET CORRECTION POINTS
-	json_object_object_get_ex(json.parsed_jsons, "wallet", &json.wallet); // GET COINS IN WALLET
-	json_object_object_get_ex(json.parsed_jsons, "created_at", &json.start_date); // GET DATE USER HAS BEEN CREATED
+	json_object_object_get_ex(json.parsed_jsons, "correction_point", &json.correction_points);
+	json_object_object_get_ex(json.parsed_jsons, "wallet", &json.wallet);
+	json_object_object_get_ex(json.parsed_jsons, "created_at", &json.start_date);
 	json_object_object_get_ex(json.parsed_jsons, "updated_at", &json.updated_date);
 
 	// GET NUMBER OF PROJECTS DONE (INCLUDING POOL)
@@ -62,7 +62,6 @@ void	save_stats_db(char *content)
 	high_grade = old_high_grade;
 	av_grade = av_grade / n_projects;
 
-
 	// GET LEVEL
 	json_object_object_get_ex(json.parsed_jsons, "cursus_users", &json.cursus_users);
 	json.cursus_users = json_object_array_get_idx(json.cursus_users, 0);
@@ -72,34 +71,30 @@ void	save_stats_db(char *content)
 	json_object_object_get_ex(json.parsed_jsons, "achievements", &json.achievements);
 	int n_achievements = json_object_array_length(json.achievements);
 
-
 	// DATES
 	struct date	start;
+	struct date	now;
 	char	*start_date = (char *)json_object_get_string(json.start_date);
+	char	*today_date = (char *)json_object_get_string(json.updated_date);
 	start.year = atoi(ft_substr(start_date, 0, 4));
 	start.month = atoi(ft_substr(start_date, 5, 7));
 	start.day = atoi(ft_substr(start_date, 8, 10));
-
-	struct date	now;
-	char	*today_date = (char *)json_object_get_string(json.updated_date);
 	now.year = atoi(ft_substr(today_date, 0, 4));
 	now.month = atoi(ft_substr(today_date, 5, 7));
 	now.day = atoi(ft_substr(today_date, 8, 10));
-
 	struct Date2 dt1 = {start.day, start.month, start.year};
 	struct Date2 dt2 = {now.day, now.month, now.year};
 	int	days_diff = getDifferenceDates(dt1, dt2);
 
-	// PUT ALL INFORMATION IN DATABASE
 	char	buffer[2096];
 	sprintf(buffer, "UPDATE stats SET correction_points=%i, wallet=%i, num_projects=%i, total_attempts=%i, av_grade=%i, highest_grade=%i, lowest_grade=%i, days_in_42=%i, level=%f, num_achievements=%i WHERE id=%i",
 	json_object_get_int(json.correction_points), json_object_get_int(json.wallet),
 	n_projects, n_occurrence, av_grade, high_grade, low_grade, days_diff,
-	json_object_get_double(json.level), n_achievements, (int)user->id);
+	json_object_get_double(json.level), n_achievements, (int)id);
 	query_mysql(con, buffer);
 }
 
-void	save_user_db(char *content)
+void	update_user(char *content)
 {
 	char	buffer[2096];
 	struct json_datas	json;
@@ -114,11 +109,11 @@ void	save_user_db(char *content)
 	json_object_object_get_ex(json.campus, "city", &json.city);
 	sprintf(buffer, "UPDATE user SET login=\'%s\', full_name=\'%s\', email=\'%s\', campus_country=\'%s\', campus_city=\'%s\' WHERE id=%i",
 	json_object_get_string(json.login), json_object_get_string(json.full_name), json_object_get_string(json.email),
-	json_object_get_string(json.country), json_object_get_string(json.city), (int)user->id);
+	json_object_get_string(json.country), json_object_get_string(json.city), (int)id);
 	query_mysql(con, buffer);
 }
 
-int	get_all_info(char *user)
+int	update_db(char *user)
 {
 	struct curl_slist *list = NULL;
 	char	buffer[1024];
@@ -135,10 +130,9 @@ int	get_all_info(char *user)
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &s);
 		curl_easy_perform(curl);
-		save_stats_db(s.ptr);
-		save_user_db(s.ptr);
+		update_stats(s.ptr);
+		update_user(s.ptr);
 		free(s.ptr);
-
 		curl_easy_cleanup(curl);
 	}
 	return 0;

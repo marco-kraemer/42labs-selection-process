@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/22 14:34:23 by user42            #+#    #+#             */
-/*   Updated: 2021/08/22 14:34:46 by user42           ###   ########.fr       */
+/*   Updated: 2021/08/22 15:12:43 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	get_stats_info(struct Data *data)
 	data->num_achievements = atoi(get_from_db("stats", "num_achievements"));	
 }
 
-void	get_user_info(void)
+void	get_user_info(struct user *user)
 {
 	user->login = get_from_db("user", "login");
 	user->full_name = get_from_db("user", "full_name");

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/19 18:27:12 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/22 14:28:51 by user42           ###   ########.fr       */
+/*   Updated: 2021/08/22 15:09:26 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	*get_from_db(char *table, char *column)
 {
 	char	buffer[1048];
 
-	sprintf(buffer, "SELECT %s FROM %s WHERE id=%i", column, table, (int)user->id);
+	sprintf(buffer, "SELECT %s FROM %s WHERE id=%i", column, table, (int)id);
 	query_mysql(con, buffer);
 	MYSQL_RES *result = mysql_store_result(con);
 	MYSQL_ROW row = mysql_fetch_row(result);
