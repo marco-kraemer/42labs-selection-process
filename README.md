@@ -46,7 +46,7 @@ http://18.234.230.231:3000/login
 ## **Base de dados**
 * Toda vez que inserimos um `login` diferente, alguns dados são armazenados na base de dados (mySQL).  Os dados são salvados em duas tabelas diferentes. A tabela *user* armazena dados pessoais, enquanto a tabela *stats* armazena as estatísticas do usuário. Elas tem o *id* como **Primary Key**.
 * Para verificar esse processo, siga os passos abaixo:
-	* Siga os passos do [Modo 1](#modo-1:-acesso-local)
+	* [Siga os passos do Modo 1](#modo-1:-acesso-local)
 	- Execute o container docker mysql
 	```
 	docker exec -it mysql_container /bin/bash
