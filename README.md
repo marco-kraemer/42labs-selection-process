@@ -3,7 +3,7 @@
 * [Sobre o projeto](#sobre-o-projeto)
 * [Ferramentas e bibliotecas utilizadas](#ferramentas-e-bibliotecas-utilizadas)
 * [Modo de uso](#modo-de-uso)
-* [Informações retornadas](#informações_retornadas)
+* [Informações retornadas](#informações-retornadas)
 * [Funcionamento](#funcionamento)
 
 ## **Sobre o projeto**

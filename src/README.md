@@ -39,7 +39,7 @@ http://18.234.230.231:3000/login
 ```
 {
   "error": 404,
-  "message": Studentmaraurelanotfound
+  "message": Student_someuser_notfound
 }
 ```
 ```

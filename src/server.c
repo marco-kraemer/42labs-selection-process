@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/21 11:04:27 by user42            #+#    #+#             */
-/*   Updated: 2021/08/21 22:18:35 by user42           ###   ########.fr       */
+/*   Updated: 2021/08/21 22:25:42 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void server(struct mg_connection *c, int ev, void *ev_data, void *fn_data)
 		char	*login = ft_substr(hm->uri.ptr, 1, hm->uri.len - 1);
 		get_id_login(login);
 		if (data->id == -1) // IF LOGIN DOESN'T MATCH
-			mg_http_reply(c, 404,"Content-Type: application/json\r\n", "{\"error\": 404, \"message\": Student %s not found}", login);
+			mg_http_reply(c, 404,"Content-Type: application/json\r\n", "{\"error\": 404, \"message\": Student_%s_not_found}", login);
 		else
 		{
 			get_all_info(login);
