@@ -42,5 +42,4 @@ http://18.234.230.231:3000/login
   "message": Student_someuser_notfound
 }
 ```
-```
 * Código 404 - Not Found
