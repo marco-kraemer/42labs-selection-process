@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/21 11:08:51 by user42            #+#    #+#             */
-/*   Updated: 2021/08/21 17:49:24 by user42           ###   ########.fr       */
+/*   Updated: 2021/08/22 11:30:23 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,9 @@ void init_string(struct string *s)
 }
 
 
-void	save_info_db(char *content)
+void	save_stats_db(char *content)
 {
+	struct json_datas	json;
 
 	json.parsed_jsons = json_tokener_parse(content);
 	json_object_object_get_ex(json.parsed_jsons, "correction_point", &json.correction_points); // GET CORRECTION POINTS
@@ -91,16 +92,34 @@ void	save_info_db(char *content)
 
 	// PUT ALL INFORMATION IN DATABASE
 	char	buffer[2096];
-	sprintf(buffer, "UPDATE students SET correction_points=%i, wallet=%i, num_projects=%i, total_attempts=%i, av_grade=%i, highest_grade=%i, lowest_grade=%i, days_in_42=%i, level=%f, num_achievements=%i WHERE id=%i",
+	sprintf(buffer, "UPDATE stats SET correction_points=%i, wallet=%i, num_projects=%i, total_attempts=%i, av_grade=%i, highest_grade=%i, lowest_grade=%i, days_in_42=%i, level=%f, num_achievements=%i WHERE id=%i",
 	json_object_get_int(json.correction_points), json_object_get_int(json.wallet),
 	n_projects, n_occurrence, av_grade, high_grade, low_grade, days_diff,
-	json_object_get_double(json.level), n_achievements, (int)data->id);
+	json_object_get_double(json.level), n_achievements, (int)user->id);
+	query_mysql(con, buffer);
+}
+
+void	save_user_db(char *content)
+{
+	char	buffer[2096];
+	struct json_datas	json;
+
+	json.parsed_jsons = json_tokener_parse(content);
+	json_object_object_get_ex(json.parsed_jsons, "login", &json.login);
+	json_object_object_get_ex(json.parsed_jsons, "usual_full_name", &json.full_name);
+	json_object_object_get_ex(json.parsed_jsons, "email", &json.email);
+	json_object_object_get_ex(json.parsed_jsons, "campus", &json.campus);
+	json.campus = json_object_array_get_idx(json.campus, 0);
+	json_object_object_get_ex(json.campus, "country", &json.country);
+	json_object_object_get_ex(json.campus, "city", &json.city);
+	sprintf(buffer, "UPDATE user SET login=\'%s\', full_name=\'%s\', email=\'%s\', campus_country=\'%s\', campus_city=\'%s\' WHERE id=%i",
+	json_object_get_string(json.login), json_object_get_string(json.full_name), json_object_get_string(json.email),
+	json_object_get_string(json.country), json_object_get_string(json.city), (int)user->id);
 	query_mysql(con, buffer);
 }
 
 int	get_all_info(char *user)
 {
-	CURLcode res;
 	struct curl_slist *list = NULL;
 	char	buffer[1024];
 
@@ -115,8 +134,9 @@ int	get_all_info(char *user)
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, list);
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &s);
-		res = curl_easy_perform(curl);
-		save_info_db(s.ptr);
+		curl_easy_perform(curl);
+		save_stats_db(s.ptr);
+		save_user_db(s.ptr);
 		free(s.ptr);
 
 		curl_easy_cleanup(curl);

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 20:17:41 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/21 16:10:12 by user42           ###   ########.fr       */
+/*   Updated: 2021/08/22 10:19:15 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,33 @@
 #define ACCESS_API_INFO "grant_type=client_credentials&client_id=1a36175e33092d0d70acdf23600c9d9ceaf7fdc1146e8db6e2b609a6d90786e9&client_secret=73d987f5a96286c186f5c72f4c28393d84733bcd26a13e3679dd6b0fab4f0ba9"
 #define DB_PASSWORD "password"
 
-typedef struct oauth2struct
+struct Data
 {
-	char	*client_id;
-	char	*client_secret;
-	char	*redirectUrl;
-	char	*authCode;
-	char	*accesstoken;
-	int	*accesstokenlen;
-} oauth2struct;
+	int	correction_points;
+	int	wallet;
+	float	av_wallet_increase_per_project;
+	int	num_projects;
+	int	total_attempts;
+	int	av_grade;
+	int	high_grade;
+	int	low_grade;
+	int	days42;
+	float	days_finish_project;
+	float	hours_finish_project;
+	float	attemps_per_project;
+	char	*level;
+	int	num_achievements;
+};
+
+struct user
+{
+	char	*login;
+	double	id;
+	char	*full_name;
+	char	*email;
+	char	*campus_country;
+	char	*campus_city;
+};
 
 struct date
 {
@@ -42,6 +60,7 @@ struct date
 	int	month;
 	int	year;
 };
+
 
 struct Date2
 {
@@ -77,15 +96,16 @@ struct	json_datas
 		struct json_object *level;
 
 	struct json_object	*achievements;
+
+	struct json_object *login;
+	struct json_object *id;
+	struct json_object *full_name;
+	struct json_object *email;
+	struct json_object *campus;
+		struct json_object *country;
+		struct json_object *city;
 };
 
-struct data
-{
-	char	*content;
-
-	char	*login;
-	double	id;
-};
 
 void	server(struct mg_connection *c, int ev, void *ev_data, void *fn_data);
 int	getDifferenceDates(struct Date2 dt1, struct Date2 dt2);
@@ -93,7 +113,7 @@ int	getDifferenceDates(struct Date2 dt1, struct Date2 dt2);
 // DATABASE
 void		query_mysql(MYSQL *con, const char *s);
 void		create_db(void);
-char		*get_from_db(char *column);
+char		*get_from_db(char *column, char *table);
 
 int		get_all_info(char *user);
 
@@ -111,7 +131,7 @@ size_t 		writefunc(void *ptr, size_t size, size_t nmemb, struct string *s);
 size_t		get_token_callback(char *contents, size_t size, size_t nmemb, void *userp);
 
 extern struct json_datas	json;
-extern struct data 		*data;
+extern struct user 		*user;
 extern MYSQL 			*con;
 extern char			*mytoken;
 extern const char		*s_root_dir;

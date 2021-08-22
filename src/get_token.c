@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_token.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/19 18:25:41 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/19 18:25:52 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/22 09:50:29 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,5 @@ int	get_token(void)
 		}
 		curl_easy_cleanup(curl);
 	}
-	json.parsed_json = json_tokener_parse(data->content);
-	json_object_object_get_ex(json.parsed_json, "access_token", &json.token);
-	mytoken = ft_strjoin("Authorization: Bearer ", json_object_get_string(json.token));
 	return (0);
 }

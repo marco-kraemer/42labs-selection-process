@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/19 18:27:12 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/21 21:50:52 by user42           ###   ########.fr       */
+/*   Updated: 2021/08/22 11:40:26 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,13 @@ void	create_db(void)
 		mysql_close(con);
 		exit(1);
 	}
+	mysql_set_character_set(con, "utf8");
 	query_mysql(con, "CREATE DATABASE IF NOT EXISTS api");
 	query_mysql(con, "USE api");
-	query_mysql(con, "DROP TABLE IF EXISTS students");
-	query_mysql(con, "CREATE TABLE students(id INT, login VARCHAR(30), correction_points SMALLINT, wallet INT, num_projects SMALLINT, total_attempts SMALLINT, av_grade TINYINT, highest_grade TINYINT, lowest_grade TINYINT, days_in_42 SMALLINT, level DECIMAL(6, 2), num_achievements TINYINT);");
+	query_mysql(con, "DROP TABLE IF EXISTS user");
+	query_mysql(con, "DROP TABLE IF EXISTS stats");
+	query_mysql(con, "CREATE TABLE user(id INT, login VARCHAR(30), full_name VARCHAR(250), email VARCHAR(100), campus_country VARCHAR(50), campus_city VARCHAR(50))");
+	query_mysql(con, "CREATE TABLE stats(id INT, correction_points SMALLINT, wallet INT, num_projects SMALLINT, total_attempts SMALLINT, av_grade TINYINT, highest_grade TINYINT, lowest_grade TINYINT, days_in_42 SMALLINT, level DECIMAL(6, 2), num_achievements TINYINT)");
 }
 
 void	query_mysql(MYSQL *con, const char *s)
@@ -43,11 +46,11 @@ void	query_mysql(MYSQL *con, const char *s)
 	}
 }
 
-char	*get_from_db(char *column)
+char	*get_from_db(char *table, char *column)
 {
 	char	buffer[1048];
 
-	sprintf(buffer, "SELECT %s FROM students WHERE id=%i", column, (int)data->id);
+	sprintf(buffer, "SELECT %s FROM %s WHERE id=%i", column, table, (int)user->id);
 	query_mysql(con, buffer);
 	MYSQL_RES *result = mysql_store_result(con);
 	MYSQL_ROW row = mysql_fetch_row(result);

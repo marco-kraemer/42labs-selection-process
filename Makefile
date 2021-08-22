@@ -9,7 +9,7 @@ OBJ = $(addprefix $(OBJ_PATH)/, $(SRC:.c=.o))
 
 CC = gcc
 
-FLAGS = #-Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror
 
 all: $(NAME) $(OBJ)
 
