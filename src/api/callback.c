@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/19 18:14:12 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/22 15:04:33 by user42           ###   ########.fr       */
+/*   Updated: 2021/08/22 15:23:16 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/api.h"
+#include "../../includes/api.h"
 
 size_t writefunc(void *ptr, size_t size, size_t nmemb, struct string *s)
 {

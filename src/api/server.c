@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/21 11:04:27 by user42            #+#    #+#             */
-/*   Updated: 2021/08/22 15:13:34 by user42           ###   ########.fr       */
+/*   Updated: 2021/08/22 15:23:46 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/api.h"
+#include "../../includes/api.h"
 
 void server(struct mg_connection *c, int ev, void *ev_data, void *fn_data)
 {

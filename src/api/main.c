@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 15:53:11 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/22 15:09:14 by user42           ###   ########.fr       */
+/*   Updated: 2021/08/22 15:23:43 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/api.h"
+#include "../../includes/api.h"
 
 MYSQL 			*con;
 char			*mytoken;

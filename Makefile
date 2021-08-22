@@ -1,10 +1,10 @@
 NAME = a.out
 
-SRC_PATH = ./src
+SRC_PATH = ./src/*
 
 OBJ_PATH = ./obj
 
-SRC = $(notdir $(wildcard ./src/*.c))
+SRC = $(notdir $(wildcard ./src/*/*.c))
 OBJ = $(addprefix $(OBJ_PATH)/, $(SRC:.c=.o))
 
 CC = gcc

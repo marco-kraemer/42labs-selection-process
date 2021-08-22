@@ -1,36 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/18 23:42:26 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/18 23:45:01 by maraurel         ###   ########.fr       */
+/*   Created: 2021/08/18 09:02:37 by maraurel          #+#    #+#             */
+/*   Updated: 2021/08/22 15:23:21 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/api.h"
+#include "../../includes/api.h"
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*p;
-	size_t	i;
+	int		i;
+	int		len;
 
-	if (!s)
+	len = strlen(s1) + strlen(s2);
+	if (!s1 || !s2)
 		return (NULL);
 	if (!(p = malloc(len + 1)))
 		return (NULL);
 	i = 0;
-	if (start < strlen(s))
+	while (s1[i])
 	{
-		while (i < len && s[start])
-		{
-			p[i] = s[start];
-			i++;
-			start++;
-		}
+		p[i] = s1[i];
+		i++;
 	}
-	p[i] = '\0';
+	i = 0;
+	while (s2[i])
+	{
+		p[strlen(s1) + i] = s2[i];
+		i++;
+	}
+	p[strlen(s1) + i] = '\0';
 	return (p);
 }

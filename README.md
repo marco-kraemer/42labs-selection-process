@@ -99,4 +99,4 @@ docker-compose stop
 
 ## **Funcionamento**
 Para informações sobre o funcionamento da API, acesse:
-* [Documentação da API](https://github.com/42sp/42labs-selection-process-marco-kraemer/tree/main/src/README.md)
+* [Documentação da API](https://github.com/42sp/42labs-selection-process-marco-kraemer/blob/main/DOCUMENTATION.md)

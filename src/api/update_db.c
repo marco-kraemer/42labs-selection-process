@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/21 11:08:51 by user42            #+#    #+#             */
-/*   Updated: 2021/08/22 15:18:53 by user42           ###   ########.fr       */
+/*   Updated: 2021/08/22 15:23:51 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/api.h"
+#include "../../includes/api.h"
 
 void init_string(struct string *s)
 {
