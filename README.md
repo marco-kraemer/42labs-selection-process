@@ -36,30 +36,6 @@ Após isso, podemos acessar a seguinte url, substituindo `login` pelo login de u
 http://localhost:3000/login
 ```
 
-Toda vez que inserimos um `login` diferente, alguns dados são armazenados na base de dados (mySQL). Podemos verificar esse processo realizando os seguintes comandos:
-
-- 1-) Execute o container docker mysql
-```
-docker exec -it mysql_container /bin/bash
-```
-- 2-) Acesse o mySQL
-```
-mysql -u root -p
-```
-- 3-) Insira a senha: **password**
-- 4-) Selecione a base de dados *api*
-```
-USE api
-```
-- 5-) Selecione os dados da tabela *students*
-```
-SELECT * FROM students
-```
-Para parar os containers, execute:
-```
-docker-compose stop
-```
-
 ### Modo 2: Acesso através da AmazonEC2
 *Amazon Elastic Compute Cloud, ou EC2 permite que usuários aluguem computadores virtuais para rodarem suas próprias aplicações*
 - 1-) Entre na seguinte url, substituindo `login` pelo login de um aluno:
@@ -67,23 +43,59 @@ docker-compose stop
 http://18.234.230.231:3000/login
 ```
 
+## **Base de dados**
+* Toda vez que inserimos um `login` diferente, alguns dados são armazenados na base de dados (mySQL).  Os dados são salvados em duas tabelas diferentes. A tabela *user* armazena dados pessoais, enquanto a tabela *stats* armazena as estatísticas do usuário. Elas tem o *id* como **Primary Key**.
+* Para verificar esse processo, siga os passos abaixo:
+- Siga os passos do [Modo 1](#modo-1:-acesso-local)
+- Execute o container docker mysql
+```
+docker exec -it mysql_container /bin/bash
+```
+- Acesse o mySQL
+```
+mysql -u root -p
+```
+- Insira a senha: **password**
+- Selecione a base de dados *api*
+```
+USE api
+```
+- Selecione os dados da tabela *user* ou *stats*
+```
+SELECT * FROM user
+```
+```
+SELECT * FROM stats
+```
+Para parar os containers, execute:
+```
+docker-compose stop
+```
+
 ## **Informações retornadas**
 **Todas as informações são com base na última atualização**
-- login
-- Pontos de correção
-- Carteira
-- Aumento médio da carteira por projeto
-- Número de projetos feitos
-- Total de tentativas
-- Maior nota
-- Menor nota
-- Nota média
-- Total de dias na 42
-- Dias necessários para finalizar um projeto
-- Horas necessárias para finalizar um projeto
-- Média de tentativas por projeto
-- Level
-- Número de conquistas
+- user:
+	- Login
+	- Id
+	- Nome completo
+	- Email
+	- Cidade onde estuda
+	- País onde estuda
+- stats:
+	- Pontos de correção
+	- Carteira
+	- Aumento médio da carteira por projeto
+	- Número de projetos feitos
+	- Total de tentativas
+	- Maior nota
+	- Menor nota
+	- Nota média
+	- Total de dias na 42
+	- Dias necessários para finalizar um projeto
+	- Horas necessárias para finalizar um projeto
+	- Média de tentativas por projeto
+	- Level
+	- Número de conquistas
 
 ## **Funcionamento**
 Para informações sobre o funcionamento da API, acesse:
