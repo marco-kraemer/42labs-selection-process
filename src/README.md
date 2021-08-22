@@ -14,7 +14,7 @@ ou
 http://18.234.230.231:3000/login
 ```
 
-**Verificar Modo de uso**
+*Verificar Modo de uso*
 
 ## Resposta em caso de sucesso
 - Exemplo:

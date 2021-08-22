@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/17 20:17:41 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/22 10:19:15 by user42           ###   ########.fr       */
+/*   Updated: 2021/08/22 14:35:16 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ struct	json_datas
 	struct json_object	*achievements;
 
 	struct json_object *login;
-	struct json_object *id;
 	struct json_object *full_name;
 	struct json_object *email;
 	struct json_object *campus;
@@ -124,6 +123,8 @@ char		*ft_substr(char const *s, unsigned int start, size_t len);
 // GET
 int		get_id_login(char *user);
 int		get_token(void);
+void		get_user_info(void);
+void		get_stats_info(struct Data *data);
 
 // CALLBACK
 size_t		get_id_login_callback(char *content, size_t size, size_t nmemb, void *userp);

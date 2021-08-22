@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/19 18:14:12 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/22 09:50:38 by user42           ###   ########.fr       */
+/*   Updated: 2021/08/22 14:29:51 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,11 @@ size_t	get_token_callback(char *contents, size_t size, size_t nmemb, void *userp
 {
 	struct json_datas	json;
 
-	size_t realsize = size * nmemb;
 	user = (struct user *) userp;	
 	json.parsed_json = json_tokener_parse(contents);
 	json_object_object_get_ex(json.parsed_json, "access_token", &json.token);
 	mytoken = ft_strjoin("Authorization: Bearer ", json_object_get_string(json.token));
-	return realsize;
+	return (size * nmemb);
 }
 
 size_t	get_id_login_callback(char *content, size_t size, size_t nmemb, void *userp)
