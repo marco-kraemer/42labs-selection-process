@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/21 11:10:16 by user42            #+#    #+#             */
-/*   Updated: 2021/08/21 11:10:36 by user42           ###   ########.fr       */
+/*   Updated: 2021/08/21 17:47:33 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	get_id_login(char *user)
 	if(curl)
 	{
 		CURLcode res;
-	//	query_mysql(con, "DELETE FROM students");
 		sprintf(buffer, "https://api.intra.42.fr/v2/users/%s", user);
 		curl_easy_setopt(curl, CURLOPT_URL, buffer);
 		list = curl_slist_append(list, mytoken);

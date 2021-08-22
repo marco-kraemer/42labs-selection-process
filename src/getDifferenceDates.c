@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getDifferenceDates.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maraurel <maraurel@student.42sp>           +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/20 09:33:25 by maraurel          #+#    #+#             */
-/*   Updated: 2021/08/20 09:36:43 by maraurel         ###   ########.fr       */
+/*   Updated: 2021/08/21 17:48:50 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,23 @@ const int monthDays[12]
 
 int countLeapYears(struct Date2 d)
 {
-    int years = d.y;
-    if (d.m <= 2)
-        years--;
-    return years / 4
-           - years / 100
-           + years / 400;
+	int years = d.y;
+	if (d.m <= 2)
+		years--;
+	return years / 4
+		- years / 100
+		+ years / 400;
 }
 
 int getDifferenceDates(struct Date2 dt1, struct Date2 dt2)
 {
-    long int n1 = dt1.y * 365 + dt1.d;
-    for (int i = 0; i < dt1.m - 1; i++)
-        n1 += monthDays[i];
-    n1 += countLeapYears(dt1);
-    long int n2 = dt2.y * 365 + dt2.d;
-    for (int i = 0; i < dt2.m - 1; i++)
-        n2 += monthDays[i];
-    n2 += countLeapYears(dt2);
-    return (n2 - n1);
+	long int n1 = dt1.y * 365 + dt1.d;
+	for (int i = 0; i < dt1.m - 1; i++)
+		n1 += monthDays[i];
+	n1 += countLeapYears(dt1);
+	long int n2 = dt2.y * 365 + dt2.d;
+	for (int i = 0; i < dt2.m - 1; i++)
+		n2 += monthDays[i];
+	n2 += countLeapYears(dt2);
+	return (n2 - n1);
 }

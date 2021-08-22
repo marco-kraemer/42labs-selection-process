@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/21 11:08:51 by user42            #+#    #+#             */
-/*   Updated: 2021/08/21 11:10:52 by user42           ###   ########.fr       */
+/*   Updated: 2021/08/21 17:49:24 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,6 @@ int	get_all_info(char *user)
 		save_info_db(s.ptr);
 		free(s.ptr);
 
-		/* always cleanup */
 		curl_easy_cleanup(curl);
 	}
 	return 0;

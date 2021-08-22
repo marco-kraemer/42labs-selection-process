@@ -1,10 +1,16 @@
 # API - 42Labs
 
+* [Sobre o projeto](#sobre-o-projeto)
+* [Ferramentas e bibliotecas utilizadas](#ferramentas-e-bibliotecas-utilizadas)
+* [Modo de uso](#modo-de-uso)
+* [Informações retornadas](#Informações_retornadas)
+* [Funcionamento](#funcionamento)
+
 ## **Sobre o projeto**
 Esse projeto consiste em uma API para uma aplicação de análise estátistica de alunos da 42. 
 Após a aplicação receber o `login` do aluno, deve retornar informações e análises buscadas na [API oficial da Intra](https://api.intra.42.fr/). Essas informações são colocadas em um banco de dados.
 
-# **Informações sobre a API**
+- Para informações sobre o funcionamento da API, acesse: [Funcionamento](#funcionamento)
 
 ## **Ferramentas e bibliotecas utilizadas**
 
@@ -54,7 +60,7 @@ Para parar os containers, execute:
 docker-compose stop
 ```
 
-### Modo 2: Acesso via AmazonEC2
+### Modo 2: Acesso através da AmazonEC2
 *Amazon Elastic Compute Cloud, ou EC2 permite que usuários aluguem computadores virtuais para rodarem suas próprias aplicações*
 - 1-) Entre na seguinte url, substituindo `login` pelo login de um aluno:
 ```
@@ -80,3 +86,5 @@ http://18.234.230.231:3000/login
 - Número de conquistas
 
 ## **Funcionamento**
+Para informações sobre o funcionamento da API, acesse:
+* [Documentação da API](https://github.com/42sp/42labs-selection-process-marco-kraemer/tree/main/src/README.md)
